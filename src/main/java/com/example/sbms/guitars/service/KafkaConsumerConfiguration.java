@@ -24,6 +24,7 @@
 package com.example.sbms.guitars.service;
 
 import com.example.sbms.guitars.model.Filter;
+import com.example.sbms.guitars.model.Guitars;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +32,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
 @Configuration
@@ -43,9 +45,10 @@ public class KafkaConsumerConfiguration {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Filter> filterKafkaListenerContainerFactory(KafkaProperties kafkaProperties) {
+    public ConcurrentKafkaListenerContainerFactory<String, Filter> filterKafkaListenerContainerFactory(KafkaProperties kafkaProperties, KafkaTemplate<String, Guitars> kafkaTemplate) {
         ConcurrentKafkaListenerContainerFactory<String, Filter> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(filterConsumerFactory(kafkaProperties));
+        factory.setReplyTemplate(kafkaTemplate);
         return factory;
     }
 }
