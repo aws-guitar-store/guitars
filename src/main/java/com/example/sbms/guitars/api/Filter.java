@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.example.sbms.guitars.model;
+package com.example.sbms.guitars.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

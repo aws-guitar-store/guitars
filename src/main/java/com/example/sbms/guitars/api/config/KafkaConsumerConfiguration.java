@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.example.sbms.guitars.service;
+package com.example.sbms.guitars.api.config;
 
-import com.example.sbms.guitars.model.Filter;
+import com.example.sbms.guitars.api.Filter;
 import com.example.sbms.guitars.model.Guitars;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;

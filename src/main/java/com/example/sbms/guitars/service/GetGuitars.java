@@ -23,23 +23,15 @@
  */
 package com.example.sbms.guitars.service;
 
-import com.example.sbms.guitars.model.Filter;
 import com.example.sbms.guitars.model.Guitar;
-import com.example.sbms.guitars.model.Guitars;
 import com.example.sbms.guitars.service.data.GuitarRepository;
 import org.springframework.data.domain.Sort;
-import org.springframework.kafka.annotation.EnableKafka;
-import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@EnableKafka
 public class GetGuitars {
     private final GuitarRepository guitarRepository;
 
@@ -51,19 +43,7 @@ public class GetGuitars {
         return guitarRepository.findAll(Sort.by("make", "model"));
     }
 
-    @KafkaListener(topics = "${spring.kafka.consumer.properties.event.guitars-requested.topic}", containerFactory = "filterKafkaListenerContainerFactory")
-    @SendTo
-    public Guitars receiveGuitarsRequest(@Payload Filter filter) {
-        if (filter.forAll()) {
-            return new Guitars(guitarRepository.findAll(Sort.by("make", "model")));
-        }
-        if (filter.forId()) {
-            Optional<Guitar> guitar = guitarRepository.findById(filter.id());
-            List<Guitar> guitars = new ArrayList<>();
-            guitar.ifPresent(guitars::add);
-            return new Guitars(guitars);
-        }
-        // TODO: handle other filters
-        return new Guitars();
+    public Optional<Guitar> byId(String id) {
+        return guitarRepository.findById(id);
     }
 }
