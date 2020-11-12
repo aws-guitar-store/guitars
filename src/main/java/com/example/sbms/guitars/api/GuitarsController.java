@@ -23,10 +23,10 @@
  */
 package com.example.sbms.guitars.api;
 
-import com.example.sbms.guitars.model.Guitar;
-import com.example.sbms.guitars.model.Guitars;
-import com.example.sbms.guitars.service.GetGuitars;
-import org.springframework.data.domain.Sort;
+import com.example.sbms.guitars.api.model.Filter;
+import com.example.sbms.guitars.domain.model.Guitar;
+import com.example.sbms.guitars.domain.model.Guitars;
+import com.example.sbms.guitars.domain.service.GetGuitars;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;

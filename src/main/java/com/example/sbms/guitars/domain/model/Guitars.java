@@ -21,29 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.example.sbms.guitars.service;
+package com.example.sbms.guitars.domain.model;
 
-import com.example.sbms.guitars.model.Guitar;
-import com.example.sbms.guitars.service.data.GuitarRepository;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Optional;
 
-@Service
-public class GetGuitars {
-    private final GuitarRepository guitarRepository;
-
-    public GetGuitars(GuitarRepository guitarRepository) {
-        this.guitarRepository = guitarRepository;
-    }
-
-    public List<Guitar> allByMakeAndModel() {
-        return guitarRepository.findAll(Sort.by("make", "model"));
-    }
-
-    public Optional<Guitar> byId(String id) {
-        return guitarRepository.findById(id);
-    }
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Guitars {
+    private List<Guitar> all;
 }

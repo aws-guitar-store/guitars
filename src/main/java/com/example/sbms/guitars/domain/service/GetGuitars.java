@@ -21,29 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.example.sbms.guitars.api;
+package com.example.sbms.guitars.domain.service;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.example.sbms.guitars.domain.model.Guitar;
+import com.example.sbms.guitars.domain.service.data.GuitarRepository;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 
-import java.util.Map;
+import java.util.List;
+import java.util.Optional;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Filter {
-    private Map<String, Object> args;
+@Service
+public class GetGuitars {
+    private final GuitarRepository guitarRepository;
 
-    public boolean forAll() {
-        return args == null || args.isEmpty();
+    public GetGuitars(GuitarRepository guitarRepository) {
+        this.guitarRepository = guitarRepository;
     }
 
-    public boolean forId() {
-        return args != null && args.containsKey("id");
+    public List<Guitar> allByMakeAndModel() {
+        return guitarRepository.findAll(Sort.by("make", "model"));
     }
 
-    public String id() {
-        return args.get("id").toString();
+    public Optional<Guitar> byId(String id) {
+        return guitarRepository.findById(id);
     }
 }

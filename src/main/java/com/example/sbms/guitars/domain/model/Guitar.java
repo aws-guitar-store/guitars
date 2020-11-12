@@ -21,10 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.example.sbms.guitars.service.data;
+package com.example.sbms.guitars.domain.model;
 
-import com.example.sbms.guitars.model.Guitar;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-public interface GuitarRepository extends MongoRepository<Guitar, String> {
+@Data
+@Document(collection = "guitars")
+public class Guitar {
+    @Id
+    public String id;
+
+    private String make;
+
+    private String model;
+
+    private String finish;
+
+    private String type;
+
+    private String body;
+
+    private int price;
+
+    private String image;
 }

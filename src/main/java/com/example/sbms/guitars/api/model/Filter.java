@@ -21,29 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.example.sbms.guitars.model;
+package com.example.sbms.guitars.api.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.NoArgsConstructor;
+
+import java.util.Map;
 
 @Data
-@Document(collection = "guitars")
-public class Guitar {
-    @Id
-    public String id;
+@NoArgsConstructor
+@AllArgsConstructor
+public class Filter {
+    private Map<String, Object> args;
 
-    private String make;
+    public boolean forAll() {
+        return args == null || args.isEmpty();
+    }
 
-    private String model;
+    public boolean forId() {
+        return args != null && args.containsKey("id");
+    }
 
-    private String finish;
-
-    private String type;
-
-    private String body;
-
-    private int price;
-
-    private String image;
+    public String id() {
+        return args.get("id").toString();
+    }
 }

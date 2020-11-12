@@ -23,8 +23,8 @@
  */
 package com.example.sbms.guitars.api.config;
 
-import com.example.sbms.guitars.api.Filter;
-import com.example.sbms.guitars.model.Guitars;
+import com.example.sbms.guitars.api.model.Filter;
+import com.example.sbms.guitars.domain.model.Guitars;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
