@@ -21,17 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.example.sbms.guitars.domain.model;
+package com.example.sbms.guitars.integration.config;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.integration.dsl.HeaderEnricherSpec;
+import org.springframework.integration.dsl.IntegrationFlow;
+import org.springframework.integration.dsl.IntegrationFlows;
 
-import java.util.List;
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Guitars {
-    private List<Guitar> all;
+@Configuration
+public class StreamConfiguration {
+    @Bean
+    public IntegrationFlow headerEnricherFlow() {
+        return IntegrationFlows.from(StreamGateway.ENRICH)
+                .enrichHeaders(HeaderEnricherSpec::headerChannelsToString)
+                .channel(GatewayChannels.REQUEST)
+                .get();
+    }
 }

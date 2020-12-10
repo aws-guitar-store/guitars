@@ -27,17 +27,20 @@ import com.example.sbms.guitars.api.model.Filter;
 import com.example.sbms.guitars.domain.model.Guitar;
 import com.example.sbms.guitars.domain.model.Guitars;
 import com.example.sbms.guitars.domain.service.GetGuitars;
-import org.springframework.kafka.annotation.EnableKafka;
-import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.cloud.stream.annotation.EnableBinding;
+import org.springframework.cloud.stream.annotation.StreamListener;
+import org.springframework.cloud.stream.messaging.Processor;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@EnableKafka
+@EnableBinding({ Processor.class })
 @Component
 public class GuitarsController {
     private final GetGuitars getGuitars;
@@ -46,19 +49,27 @@ public class GuitarsController {
         this.getGuitars = getGuitars;
     }
 
-    @KafkaListener(topics = "${spring.kafka.consumer.properties.event.guitars-requested.topic}", containerFactory = "filterKafkaListenerContainerFactory")
-    @SendTo
-    public Guitars receiveGuitarsRequest(@Payload Filter filter) {
+    @StreamListener(Processor.INPUT)
+    @SendTo(Processor.OUTPUT)
+    public Message<Guitars> receiveGuitarsRequest(Message<Filter> filterRequest) {
+        Filter filter = filterRequest.getPayload();
         if (filter.forAll()) {
-            return new Guitars(getGuitars.allByMakeAndModel());
+            return buildReplyMessage(new Guitars(getGuitars.allByMakeAndModel()), filterRequest.getHeaders());
         }
         if (filter.forId()) {
             Optional<Guitar> guitar = getGuitars.byId(filter.id());
             List<Guitar> guitars = new ArrayList<>();
             guitar.ifPresent(guitars::add);
-            return new Guitars(guitars);
+            return buildReplyMessage(new Guitars(guitars), filterRequest.getHeaders());
         }
         // TODO: handle other filters
-        return new Guitars();
+        return buildReplyMessage(new Guitars(), filterRequest.getHeaders());
+    }
+
+    private <T> Message<T> buildReplyMessage(T payload, MessageHeaders headers) {
+        return MessageBuilder
+                .withPayload(payload)
+                .copyHeaders(headers)
+                .build();
     }
 }

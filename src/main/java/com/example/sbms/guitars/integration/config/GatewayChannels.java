@@ -21,17 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.example.sbms.guitars.domain.model;
+package com.example.sbms.guitars.integration.config;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.springframework.cloud.stream.annotation.Output;
+import org.springframework.messaging.MessageChannel;
 
-import java.util.List;
+public interface GatewayChannels {
+    String REQUEST = "request";
+    String REPLY = "reply";
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Guitars {
-    private List<Guitar> all;
+    @Output(REQUEST)
+    MessageChannel request();
+
+    @Output(REPLY)
+    MessageChannel reply();
 }
